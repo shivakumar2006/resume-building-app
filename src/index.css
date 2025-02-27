@@ -8,3 +8,10 @@ body {
     background-color: #f1f1f1;
     font-family: "MuseoModerno", sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
+@theme {
+    --color-txtPrimary: #555;
+    --color-txtLight: #999;
+    --color-txtDark: #222;
+    --color-bgPrimary: #f1f1f1;
+}
