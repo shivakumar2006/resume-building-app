@@ -1,19 +1,16 @@
 import React from 'react'; 
 import { FaChevronRight } from 'react-icons/fa';
 
+import { supabase } from '../supabase';
+
 const AuthButtonWithProvider = ({Icon, Label, Provider}) => {
 
-    const handleClick = () => {
-        switch(Provider) {
-            case "GoogleAuthProvider":
-                console.log("Google auth is clicked...");
-                break;
-            case "GitHubAuthProvider":
-                console.log("Github auth is clicked...");
-                break;
-            default:
-                console.log("not any auth is clicked...");
-                break;
+    const handleClick = async () => {
+        const { data, error } = await supabase.auth.signInWithOAuth({provider:Provider})
+        if(error) {
+            console.log("Authentication Error : , error");
+        } else {
+            console.log("UserSignedIn : ", data);
         }
     }
 

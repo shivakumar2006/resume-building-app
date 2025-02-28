@@ -1,12 +1,25 @@
-import React from 'react'; 
+import React, { useEffect } from 'react'; 
 import { Logo } from '../assets';
 import { Footer } from "../containers";
 import { AuthButtonWithProvider } from "../components";
-// import { GoogleAuthProvider, GitHubAuthProvider } from "firebase/auth";
-
+import { useNavigate } from 'react-router-dom';
 import {FaGoogle, FaGithub} from "react-icons/fa"
+import { toast } from 'react-toastify';
+import { useUser } from "../hooks/useUser";
 
 const Authentication = () => {
+
+    const notify = () => toast("Wow so easy!");
+    const { data, isLoading, isError } = useUser();
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!isLoading && data) {
+            navigate("/", { replace: true })
+        }
+    }, [isLoading, data])
+
     return (
         <div className='w-full h-screen overflow-hidden flex flex-col items-start justify-start px-6 py-4 gap-6'>
             {/* top section */}
@@ -21,16 +34,16 @@ const Authentication = () => {
                     <AuthButtonWithProvider 
                         Icon={FaGoogle}
                         Label={"Signin with google"}
-                        Provider={"GoogleAuthProvider"}
+                        Provider="google"
                     />
                     <AuthButtonWithProvider 
                         Icon={FaGithub}
                         Label={"Signin with github"}
-                        Provider={"GitHubAuthProvider"}
+                        Provider="github"
                     />
                 </div>
             </div>
-
+                <button onClick={notify}>Click me</button>
             {/* bottom section */}
             <Footer />
         </div>
