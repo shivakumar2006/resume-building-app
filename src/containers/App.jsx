@@ -8,9 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 const Homepage = lazy(() => import("../pages/Homepage"));
 const Authentication = lazy(() => import("../pages/Authentication"));
 
-const App = () => {
+const queryClient = new QueryClient();
 
-    const queryClient = new QueryClient();
+const App = () => {
 
     return (
         <QueryClientProvider client={queryClient}>

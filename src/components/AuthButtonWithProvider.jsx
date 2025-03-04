@@ -1,7 +1,7 @@
 import React from 'react'; 
 import { FaChevronRight } from 'react-icons/fa';
 
-import { supabase } from '../supabase';
+import supabase from '../supabase';
 
 const AuthButtonWithProvider = ({Icon, Label, Provider}) => {
 

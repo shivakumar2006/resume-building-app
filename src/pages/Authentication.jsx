@@ -5,7 +5,8 @@ import { AuthButtonWithProvider } from "../components";
 import { useNavigate } from 'react-router-dom';
 import {FaGoogle, FaGithub} from "react-icons/fa"
 import { toast } from 'react-toastify';
-import { useUser } from "../hooks/useUser";
+import  useUser  from "../hooks/useUser";
+import supabase from '../supabase';
 
 const Authentication = () => {
 
@@ -13,12 +14,26 @@ const Authentication = () => {
     const { data, isLoading, isError } = useUser();
 
     const navigate = useNavigate();
+    
+    useEffect(() => {
+        supabase.auth.getSession()
+        .then(({ data }) => {
+            console.log("manually fetched session: ", data);
+        }).catch(error => {
+            console.log("Error fetching session : ", error);
+        }
+        )
+    }, [])
 
     useEffect(() => {
         if(!isLoading && data) {
             navigate("/", { replace: true })
         }
     }, [isLoading, data])
+
+    // if(isLoading) {
+    //     return <MainSpinner />
+    // }
 
     return (
         <div className='w-full h-screen overflow-hidden flex flex-col items-start justify-start px-6 py-4 gap-6'>

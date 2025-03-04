@@ -1,26 +1,36 @@
-import { supabase } from "../supabase";
+import supabase from "../supabase";
 
-export const getUserDetail = (callback) => {
+export const getUserDetail = async () => {
     try {
-        const { data: subscription, error } = supabase.auth.onAuthStateChange((event, session) => {
-            if (error) {
-                console.error("onListener error:", error);
-                callback(null);
-                return;
-            }
-            callback(session?.user || null);
-        });
+        // Get the current session
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-        if (!subscription) {
-            throw new Error("Auth listener failed to initialize...");
+        console.log("Session Data:", session); // Debugging
+
+        if (sessionError) throw sessionError;
+        if (!session) {
+            throw new Error("No active session found.");
+        }
+        if (!session.user) {
+            throw new Error("User is not authenticated.");
         }
 
-        return () => {
-            console.log("Unsubscribing from auth listener...");
-            subscription?.unsubscribe(); // Correct way to unsubscribe
-        };
-    } catch (err) {
-        console.error("Error in ListenOnAuthChanges:", err);
-        return () => {};
+        console.log("Authenticated User:", session.user);
+
+        const user = session.user;
+
+        // Fetch user details from Supabase 'users' table
+        const { data: userData, error: userError } = await supabase
+            .from("users")
+            .select("*")
+            .eq("id", user.UUID)
+            .single();
+
+        if (userError) throw userError;
+
+        return userData;
+    } catch (error) {
+        console.error("Error in getUserDetail:", error.message);
+        return null; // Return null if authentication fails
     }
 };
